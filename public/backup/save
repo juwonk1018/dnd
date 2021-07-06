@@ -1,0 +1,29 @@
+const [show, setShow] = useState(false);
+  const [ShowButton, setShowButton] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const handleShowButton = () => setShowButton(true);
+  const handleClose2 = () => setShowButton(false);
+  const modalSave = () => {setShowButton(true); setShow(false);}
+<div id="editButton"> 
+        <ButtonGroup size = "sm" aria-label="edit">
+          {ShowButton && <Button onClick={handleClose2} variant="primary">수정</Button>}
+          {!ShowButton && <Button onClick={handleShow} type="submit" variant="primary">저장</Button>}
+          {!ShowButton && <Button onClick={handleShowButton} variant="outline-secondary">취소</Button>}
+        </ButtonGroup>
+
+        <Modal show={show} onHide={handleClose} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>저장</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>저장을 하시겠습니까?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              취소
+            </Button>
+            <Button variant="primary" onClick={modalSave}>
+              저장
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
