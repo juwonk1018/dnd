@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Modal from 'react-bootstrap/Modal';
+//import Modal from 'react-bootstrap/Modal';
 import {List, ListItem, ListItemText, ListItemIcon, IconButton, ListItemSecondaryAction} from "@material-ui/core";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import RootRef from "@material-ui/core/RootRef";
 import axios from "axios";
-
-
+import { FiAlignJustify } from 'react-icons/fi';
+import {  Modal } from 'antd';
+import 'antd/dist/antd.css';
 
 
 
@@ -40,7 +41,7 @@ function App() {
     const response = await axios.get("http://localhost:3002/api");
     resData = response.data;
     resData = JSON.parse(resData);
-    setName(resData.red);
+    setName(resData);
   };
 
   const addData = (e) => {
@@ -75,7 +76,6 @@ function App() {
   });
 
   useEffect(() => {
-    console.log('Data Changed');
     callApi();
     
   },[ShowButton]);
@@ -84,29 +84,7 @@ function App() {
     
     
     <div>
-      <div id="editButton"> 
-        <ButtonGroup size = "sm" aria-label="edit">
-          {ShowButton && <Button onClick={handleClose2} variant="primary">수정</Button>}
-          {!ShowButton && <Button onClick={handleShow} type="submit" variant="primary">저장</Button>}
-          {!ShowButton && <Button onClick={handleShowButton} variant="outline-secondary">취소</Button>}
-        </ButtonGroup>
-
-        <Modal show={show} onHide={handleClose} animation={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>저장</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>저장을 하시겠습니까?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              취소
-            </Button>
-            <Button type = "submit" variant="primary" onClick={modalSave, addData}>
-              저장
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-
+      
       <div id="App2"></div>
 
       <DragDropContext onDragEnd={(param) => {
@@ -135,7 +113,7 @@ function App() {
                           provided.draggableProps.style
                         )}
                       >
-
+                        <FiAlignJustify/> 
                         <ListItemText
                           secondary={item.text}
                         />
@@ -152,8 +130,24 @@ function App() {
           )}
         </Droppable>
       </DragDropContext>
+      <div id="editButton"> 
+        <ButtonGroup size = "sm" aria-label="edit">
+          {ShowButton && <Button onClick={handleClose2} variant="primary">수정</Button>}
+          {!ShowButton && <Button onClick={handleShow} type="submit" variant="primary">저장</Button>}
+          {!ShowButton && <Button onClick={handleShowButton} variant="outline-secondary">취소</Button>}
+        </ButtonGroup>
 
-      
+        <Modal
+          title="Save"
+          visible={show}
+          onOk={modalSave, addData}
+          onCancel={handleClose}
+        >
+          <p>저장 하시겠습니까?</p>
+        </Modal>
+
+      </div>
+
       
 
     </div>
