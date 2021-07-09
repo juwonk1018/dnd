@@ -1,53 +1,70 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import ReactDOM from "react-dom";
-import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 //import Modal from 'react-bootstrap/Modal';
-import {List, ListItem, ListItemText, ListItemIcon, IconButton, ListItemSecondaryAction} from "@material-ui/core";
+import {List, ListItem, ListItemText, ListItemSecondaryAction} from "@material-ui/core";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import RootRef from "@material-ui/core/RootRef";
 import axios from "axios";
+import { AiOutlineMinus } from 'react-icons/ai';
 import { FiAlignJustify } from 'react-icons/fi';
+import { BsPersonFill } from 'react-icons/bs';
 import {  Modal } from 'antd';
+import {  Button  } from 'antd';
 import 'antd/dist/antd.css';
-
+import { makeStyles } from '@material-ui/core/styles';
 
 
 function App() {
-  
-  const initialValue = [
-    { id: 0, text: "Select a State" }];
-  const [name, setName] = useState(initialValue);
+  const [name, setName] = useState([]);
+  const [name2, setName2] = useState([]);
   const [show, setShow] = useState(false);
   const [ShowButton, setShowButton] = useState(false);
+  const [num1, setNum1] = useState();
+  const [num2, setNum2] = useState();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleShowButton = () => setShowButton(true);
   const handleClose2 = () => setShowButton(false);
-  const modalSave = () => {setShowButton(true); setShow(false);}
-
-  const newArrayData = name.map((item, index) => {
-    return (
-      <li key={index}>
-        {item.id}({item.text})
-      </li>
-    );
-  });
   
-
   var resData;
   const callApi = async() =>{
     const response = await axios.get("http://localhost:3002/api");
     resData = response.data;
     resData = JSON.parse(resData);
-    setName(resData);
-  };
+    var stat = [];
+    var stat2 = [];
+    setName([]);
+    setName2([]);
+
+    var numb1 = 0;
+    var numb2 = 0;
+    resData.map((item,index) => {
+      if(item.bus === "yellow"){
+        stat = stat.concat(item);
+        numb1 = numb1 + 1;
+      }
+      else{
+        stat2 = stat2.concat(item);
+        numb2 = numb2 + 1;
+      }
+      
+    });
+   
+    setName(stat);
+    setName2(stat2);
+    setNum1(stat.length);
+    setNum2(stat2.length);
+    
+  }
 
   const addData = (e) => {
+    setShowButton(true);
+    setShow(false);
+
     e.preventDefault();
 
-    axios.post('./api', name)
+    axios.post('./api', name.concat(name2))
     //성공시 then 실행
     .then(function (response) {
       console.log(response);
@@ -56,10 +73,21 @@ function App() {
     .catch(function (error) {
       console.log(error);
     });
-    console.log(name);
 
+    window.location.reload();
+
+    
 
 }
+
+  const text = {
+    purple: {
+      color: "purple"
+    },
+    green: {
+      color: "green"
+    },
+  };
 
 
   const getItemStyle = (isDragging, draggableStyle) => ({
@@ -79,80 +107,213 @@ function App() {
     callApi();
     
   },[ShowButton]);
+
+  const useStyles = makeStyles({
+    '@global': {
+      '.MuiTypography-body2': {
+        fontSize: '0.5rem',
+        color: 'black',
+      },
+      '.ant-btn': {
+        fontSize: '0.5rem',
+        width : 40,
+        height : 25,
+        margin : '3px 1px',
+        padding : '0 0',
+      },
+      '.MuiListItemText-root':{
+        width : 70,
+        padding : '0px 10px 0px 0px',
+        margin: '0px 0px 0px 10px',
+      },
+      '.MuiListItem-root':{
+        padding : '8px 16px 8px 16px',
+      },
+      '.upperText':{
+        width: 60,
+      },
+      '.status':{
+        width: 20,
+      },
+      '.mainContext':{
+        border: "1px solid gray",
+      },
+
+      
+  
+      
+    },
+  });
+
+  useStyles();
   
   return (
-    
-    
-    <div>
-      
-      <div id="App2"></div>
-
-      <DragDropContext onDragEnd={(param) => {
-        const src = param.source.index;
-        const dest = param.destination.index;
-        name.splice(dest,0,name.splice(src,1)[0]);
-        
-      }}
-      >
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <RootRef rootRef={provided.innerRef}>
-              <List style={getListStyle(snapshot.isDraggingOver)}>
-                {name.map((item, index) => (
-                  item.bus === "yellow" && (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                      
-                      <ListItem
-                        ContainerComponent="li"
-                        ContainerProps={{ ref: provided.innerRef }}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
-                      >
-                        <FiAlignJustify/> 
-                        <ListItemText
-                          secondary={item.text}
-                        />
-                        <ListItemSecondaryAction>
-
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    )}
-                  </Draggable>)
-                ))}
-                {provided.placeholder}
-              </List>
-            </RootRef>
-          )}
-        </Droppable>
-      </DragDropContext>
-      <div id="editButton"> 
-        <ButtonGroup size = "sm" aria-label="edit">
-          {ShowButton && <Button onClick={handleClose2} variant="primary">수정</Button>}
-          {!ShowButton && <Button onClick={handleShow} type="submit" variant="primary">저장</Button>}
+    <div className="main">
+      <div className="editButtons" id="editButton" style = {{float:"right"}}> 
+        <ButtonGroup>
+          {ShowButton && <Button type="primary" onClick={handleClose2} variant="primary">수정</Button>}
           {!ShowButton && <Button onClick={handleShowButton} variant="outline-secondary">취소</Button>}
+          {!ShowButton && <Button type = "primary" onClick={handleShow} variant="primary">저장</Button>}
         </ButtonGroup>
 
         <Modal
           title="Save"
           visible={show}
-          onOk={modalSave, addData}
+          onOk={addData}
           onCancel={handleClose}
         >
           <p>저장 하시겠습니까?</p>
         </Modal>
-
       </div>
+      <p>&nbsp;</p>
+ 
+      <div className="mainContext">
+      <DragDropContext onDragEnd={(param) => {
+        
+        const src = param.source;
+        const dest = param.destination;
+        
+        if (!dest) {
+          return;
+      }
+        if(src.droppableId === dest.droppableId){          
+          if(dest.droppableId === "droppable"){
+            name.splice(dest.index,0,name.splice(src.index,1)[0]);
+            
+          }
+          else{
+            name2.splice(dest.index,0,name2.splice(src.index,1)[0]);
+          }
+        }
+        else{
+          console.log("different");
+          var removed;
+          
+          if(src.droppableId === "droppable"){
+            removed = name.splice(src.index,1);
+            removed[0].bus = "red";
+            name2.splice(dest.index,0,removed[0]);
+            //console.log(name2);
+          }
+          else{
+            removed = name2.splice(src.index,1);
+            removed[0].bus = "yellow";
+            name.splice(dest.index,0,removed[0]);
+            //console.log(name);
+          }
+          setNum1(name.length);
+          setNum2(name2.length);
+        };
+      }}
+      >
+      <div>&nbsp;</div>
+      <ul style = {{"fontSize":"10px","border":"1px solid #cacaca", "margin" : "0px", "padding":"5px 0px 5px 5px","borderRadius" : 3,"width" : "300px", "backgroundColor" : "#f1f5fa"}}>
+        <FiAlignJustify/><span style = {{"fontSize": "14px", "padding": "0px 10px 0px 10px"}}>S</span> <input value="Yellow" style ={{"width":150}}></input><input value="13:40" style ={{"width":45,"marginLeft":5}}></input>
+      </ul>
+      <p style = {{"margin":"16px 0px 0px 0px","borderRadius":3,"paddingRight":"4px","fontSize":"10px","float" : "right"}}><BsPersonFill style = {{"height":"0.8em"}}/><span style = {{"color" : (num1>6) ? "red" : "black"}}>{num1}명</span>/6명</p>
+      <Droppable droppableId="droppable" isDropDisabled={ShowButton}>
+        {(provided, snapshot) => (
+          <RootRef rootRef={provided.innerRef}>
+            <List style={getListStyle(snapshot.isDraggingOver)}>
+              {name.map((item, index) => (
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided, snapshot) => (
+                    
+                    <ListItem
+                      ContainerComponent="li"
+                      ContainerProps={{ ref: provided.innerRef }}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                      )}
+                    >
+                      <FiAlignJustify/> 
+                      <ListItemText
+                        className = "upperText"
+                        secondary={item.text}
+                      />
+                      <ListItemText
+                        className = "status"
+                        secondaryTypographyProps={item.status === "승차"? {style: text.green} : {style: text.purple}}
+                        secondary={item.status}
+                      />
+                      <span><AiOutlineMinus
+                        style={{"width":10}}
+                      /></span>
+                      <ListItemSecondaryAction>
 
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+
+            </List>
+
+              
+          </RootRef>
+        )}
+      </Droppable>
       
+      <ul style = {{"fontSize":"10px","border":"1px solid #cacaca", "margin" : "0px", "padding":"5px 0px 5px 5px","borderRadius" : 3,"width" : "300px", "backgroundColor" : "#f1f5fa"}}>
+        <FiAlignJustify/><span style = {{"fontSize": "14px", "padding": "0px 10px 0px 10px"}}>1</span> <input value="Red" style ={{"width":150}}></input><input value="13:45" style ={{"width":45,"marginLeft":5}}></input>
+      </ul>
+      <p style = {{"margin":"16px 0px 0px 0px","borderRadius":3,"paddingRight":"4px","fontSize":"10px","float" : "right"}}><BsPersonFill style = {{"height":"0.8em"}}/><span style = {{"color" : (num2>6) ? "red" : "black"}}>{num2}명</span>/6명</p>
+      
+      
+      <Droppable droppableId="droppable2" isDropDisabled={ShowButton}>
+        {(provided, snapshot) => (
+          <RootRef rootRef={provided.innerRef}>
+            <List style={getListStyle(snapshot.isDraggingOver)}>
+              {name2.map((item, index) => (
+                <Draggable key={item.id} draggableId={item.id} index={index} isDragDisabled="true">
+                  {(provided, snapshot) => (
+                    
+                    <ListItem
+                      ContainerComponent="li"
+                      ContainerProps={{ ref: provided.innerRef }}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                      )}
+                    >
+                      <FiAlignJustify/> 
+                      <ListItemText 
+                        
+                        className = "upperText"
+                        secondary={item.text}
+                      />
+                      <ListItemText 
+                        className = "status"
+                        secondaryTypographyProps={item.status === "승차"? {style: text.green} : {style: text.purple}}
+                        secondary={item.status}
+                      />
+                      <span><AiOutlineMinus
+                        style={{"width":10}}
+                      /></span>
+                      <ListItemSecondaryAction>
 
-    </div>
-    
-    
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+
+            </List>
+
+              
+          </RootRef>
+        )}
+      </Droppable>
+    </DragDropContext>
+    </div>  
+  </div>    
   );
 }
 export default App;

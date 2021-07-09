@@ -15,11 +15,50 @@
 
 li.MuiListItem-container{
   width : 200px;
+  margin-bottom : 5px;
+}
 
+.status{
+  width: 30px;
+}
+.upperText{
+  width: 100px;
+}
+.main{
+  width : 330px;
+  z-index : 0;
+}
+
+.MuiList-root {
+  margin-top: 10px;
+}
+.MuiListItem-root {
+  margin-left : 45px;
+  width: 200px;
+  height : 35px;
+  background-color: rgb(240, 244, 247);
+  border-radius : 3px;
+  
 }
 
 modal{
-    border: '1px dashed gray';
+  border: '1px dashed gray';
+}
+
+.mainContext{
+  border-radius : 5px;
+  width : 320px;
+  padding-left : 10px;
+  padding-right : 10px;    
+  background-color: #f7f7f7;
+  margin-left : 10px;
+  margin-bottom : 10px;
+  border: "1px solid black";  
+}
+div{
+  -ms-user-select:none;
+  -webkit-user-select:none;
+  user-select: none,
 }
 .App-header {
   background-color: #282c34;
@@ -33,7 +72,7 @@ modal{
 }
 
 .App-link {
-  color: #61dafb;
+  color: #b6d1d8;
 }
 
 @keyframes App-logo-spin {
@@ -57,6 +96,7 @@ modal{
 .custom-btn-toolbar > .btn {
   margin-right: 1rem;
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -65,7 +105,7 @@ modal{
     bottom: 0;
     left: 0;
     z-index: 99;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(190, 190, 190, 0.473);
 }
 .modal button {
     outline: none;
@@ -77,8 +117,7 @@ modal{
     max-width: 450px;
     margin:0 auto;
     border-radius: .3rem;
-    background-color: #fff;
-    /* 팝업이 열릴때 스르륵 열리는 효과 */
+    background-color: rgba(255, 255, 255, 0.445);
     animation: modal-show .3s;
     overflow: hidden;
 }
