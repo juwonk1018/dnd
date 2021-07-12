@@ -14,7 +14,7 @@
 }
 
 li.MuiListItem-container{
-  width : 200px;
+  width : 180px;
   margin-bottom : 5px;
 }
 
@@ -34,9 +34,9 @@ li.MuiListItem-container{
 }
 .MuiListItem-root {
   margin-left : 45px;
-  width: 200px;
+  width: 190px;
   height : 35px;
-  background-color: rgb(240, 244, 247);
+  
   border-radius : 3px;
   
 }
@@ -49,11 +49,10 @@ modal{
   border-radius : 5px;
   width : 320px;
   padding-left : 10px;
-  padding-right : 10px;    
-  background-color: #f7f7f7;
+  padding-right : 10px;
   margin-left : 10px;
   margin-bottom : 10px;
-  border: "1px solid black";  
+    
 }
 div{
   -ms-user-select:none;

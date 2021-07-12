@@ -8,18 +8,38 @@ import RootRef from "@material-ui/core/RootRef";
 import axios from "axios";
 import { AiOutlineMinus } from 'react-icons/ai';
 import { FiAlignJustify } from 'react-icons/fi';
-import { BsPersonFill } from 'react-icons/bs';
+import { BsPersonFill} from 'react-icons/bs';
 import {  Modal } from 'antd';
 import {  Button  } from 'antd';
 import 'antd/dist/antd.css';
 import { makeStyles } from '@material-ui/core/styles';
 
+function LoginButton() {
+  return (
+    <button>
+        로그인
+    </button>
+  );
+}
+function LogoutButton() {
+  return (
+      <button>
+          로그아웃
+      </button>
+);
+}
+function UserButton(props) {
+  if(props.isLoggedIn) {
+      return <LogoutButton/>;
+  }
+  return <LoginButton/>;
+}
 
 function App() {
   const [name, setName] = useState([]);
   const [name2, setName2] = useState([]);
   const [show, setShow] = useState(false);
-  const [ShowButton, setShowButton] = useState(false);
+  const [ShowButton, setShowButton] = useState(true);
   const [num1, setNum1] = useState();
   const [num2, setNum2] = useState();
   const handleClose = () => setShow(false);
@@ -78,7 +98,27 @@ function App() {
 
     
 
-}
+  }
+
+  const onRemove1 = (id) => {
+    var stat = name.filter(name => name.id !== id);
+     setName(stat);
+     setNum1(stat.length);
+
+  }
+  const onRemove2 = (id) => {
+    var stat = name2.filter(name => name.id !== id);
+     setName2(stat);
+     setNum2(stat.length);
+
+  }
+
+
+  const hello = () =>{
+    console.log("hello")
+
+  }
+
 
   const text = {
     purple: {
@@ -122,21 +162,26 @@ function App() {
         padding : '0 0',
       },
       '.MuiListItemText-root':{
-        width : 70,
-        padding : '0px 10px 0px 0px',
-        margin: '0px 0px 0px 10px',
+
+        padding : '0px 0px 0px 0px',
+        margin: '0px 0px 0px 0px',
       },
       '.MuiListItem-root':{
-        padding : '8px 16px 8px 16px',
+        padding : '8px 16px 8px 8px',
+        paddingLeft : ShowButton ? 5 : 8,
+        marginLeft : ShowButton ? 25 : 45,
+        backgroundColor: ShowButton ? "#ffffff":"#f0f4f7",
       },
       '.upperText':{
-        width: 60,
+        width : 40,
+        marginLeft : 4,
       },
       '.status':{
         width: 20,
       },
       '.mainContext':{
         border: "1px solid gray",
+        backgroundColor: ShowButton ? "#ffffff" :"#f7f7f7",
       },
 
       
@@ -148,7 +193,11 @@ function App() {
   useStyles();
   
   return (
+    
     <div className="main">
+      <span className="editButtons">
+      <Button onClick={hello} variant="outline-secondary" style = {{"marginLeft" : 10}}>메모</Button>
+      </span>
       <div className="editButtons" id="editButton" style = {{float:"right"}}> 
         <ButtonGroup>
           {ShowButton && <Button type="primary" onClick={handleClose2} variant="primary">수정</Button>}
@@ -165,7 +214,6 @@ function App() {
           <p>저장 하시겠습니까?</p>
         </Modal>
       </div>
-      <p>&nbsp;</p>
  
       <div className="mainContext">
       <DragDropContext onDragEnd={(param) => {
@@ -186,7 +234,6 @@ function App() {
           }
         }
         else{
-          console.log("different");
           var removed;
           
           if(src.droppableId === "droppable"){
@@ -206,11 +253,14 @@ function App() {
         };
       }}
       >
-      <div>&nbsp;</div>
-      <ul style = {{"fontSize":"10px","border":"1px solid #cacaca", "margin" : "0px", "padding":"5px 0px 5px 5px","borderRadius" : 3,"width" : "300px", "backgroundColor" : "#f1f5fa"}}>
-        <FiAlignJustify/><span style = {{"fontSize": "14px", "padding": "0px 10px 0px 10px"}}>S</span> <input value="Yellow" style ={{"width":150}}></input><input value="13:40" style ={{"width":45,"marginLeft":5}}></input>
+      
+      <ul style = {{"fontSize":"10px","border":"1px solid #cacaca", "margin" : "10px 0px 0px 0px", "padding":"5px 0px 5px 5px","borderRadius" : 3,"width" : "300px", "backgroundColor" : "#f1f5fa"}}>
+      {!ShowButton &&<FiAlignJustify/> }<span style = {{"fontSize": "14px", "padding": "0px 9px 0px 10px"}}>S</span> <span style ={{"width":150}}>Yellow</span>
       </ul>
-      <p style = {{"margin":"16px 0px 0px 0px","borderRadius":3,"paddingRight":"4px","fontSize":"10px","float" : "right"}}><BsPersonFill style = {{"height":"0.8em"}}/><span style = {{"color" : (num1>6) ? "red" : "black"}}>{num1}명</span>/6명</p>
+      <div style = {{"textAlign":"right"}}>
+      
+      <span style = {{"margin":"16px 15px 0px 0px","borderRadius":3,"float":"right","paddingRight":"0px","fontSize":"10px"}}><BsPersonFill style = {{"height":"0.8em"}}/><span style = {{"color" : (num1>6) ? "red" : "black"}}>{num1}명</span>/6명</span>
+      
       <Droppable droppableId="droppable" isDropDisabled={ShowButton}>
         {(provided, snapshot) => (
           <RootRef rootRef={provided.innerRef}>
@@ -229,7 +279,7 @@ function App() {
                         provided.draggableProps.style
                       )}
                     >
-                      <FiAlignJustify/> 
+                      {!ShowButton && <FiAlignJustify/>}
                       <ListItemText
                         className = "upperText"
                         secondary={item.text}
@@ -239,9 +289,9 @@ function App() {
                         secondaryTypographyProps={item.status === "승차"? {style: text.green} : {style: text.purple}}
                         secondary={item.status}
                       />
-                      <span><AiOutlineMinus
+                      {!ShowButton && <span onClick={() => onRemove1(item.id)}><AiOutlineMinus
                         style={{"width":10}}
-                      /></span>
+                      /></span>}
                       <ListItemSecondaryAction>
 
                       </ListItemSecondaryAction>
@@ -258,10 +308,11 @@ function App() {
         )}
       </Droppable>
       
-      <ul style = {{"fontSize":"10px","border":"1px solid #cacaca", "margin" : "0px", "padding":"5px 0px 5px 5px","borderRadius" : 3,"width" : "300px", "backgroundColor" : "#f1f5fa"}}>
-        <FiAlignJustify/><span style = {{"fontSize": "14px", "padding": "0px 10px 0px 10px"}}>1</span> <input value="Red" style ={{"width":150}}></input><input value="13:45" style ={{"width":45,"marginLeft":5}}></input>
+      </div>
+      <ul style = {{"fontSize":"10px","border":"1px solid #cacaca", "margin" : "0px 0px 0px 0px", "marginTop": num1===0 ? 30:0,"padding":"5px 0px 5px 5px","borderRadius" : 3,"width" : "300px", "backgroundColor" : "#f1f5fa"}}>
+      {!ShowButton &&<FiAlignJustify/> }<span style = {{"fontSize": "14px", "padding": "0px 9px 0px 10px"}}>1</span> <span style ={{"marginLeft":0}}>Red</span>
       </ul>
-      <p style = {{"margin":"16px 0px 0px 0px","borderRadius":3,"paddingRight":"4px","fontSize":"10px","float" : "right"}}><BsPersonFill style = {{"height":"0.8em"}}/><span style = {{"color" : (num2>6) ? "red" : "black"}}>{num2}명</span>/6명</p>
+      <span style = {{"margin":"16px 15px 0px 0px","borderRadius":3,"paddingRight":"0px","fontSize":"10px","float" : "right"}}><BsPersonFill style = {{"height":"0.8em"}}/><span style = {{"color" : (num2>6) ? "red" : "black"}}>{num2}명</span>/6명</span>
       
       
       <Droppable droppableId="droppable2" isDropDisabled={ShowButton}>
@@ -282,7 +333,7 @@ function App() {
                         provided.draggableProps.style
                       )}
                     >
-                      <FiAlignJustify/> 
+                      {!ShowButton && <FiAlignJustify/>}
                       <ListItemText 
                         
                         className = "upperText"
@@ -293,9 +344,9 @@ function App() {
                         secondaryTypographyProps={item.status === "승차"? {style: text.green} : {style: text.purple}}
                         secondary={item.status}
                       />
-                      <span><AiOutlineMinus
+                      {!ShowButton && <span onClick={() => onRemove2(item.id)}><AiOutlineMinus
                         style={{"width":10}}
-                      /></span>
+                      /></span>}
                       <ListItemSecondaryAction>
 
                       </ListItemSecondaryAction>
@@ -304,14 +355,13 @@ function App() {
                 </Draggable>
               ))}
               {provided.placeholder}
-
             </List>
-
-              
           </RootRef>
         )}
       </Droppable>
     </DragDropContext>
+
+    <div style ={{"marginTop": num2===0 ? 30:0}}></div> {/*if num2 == 0, add space to end of the block */}
     </div>  
   </div>    
   );
