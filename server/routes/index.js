@@ -23,7 +23,7 @@ router.get('/',function(req,res){
     
 });
 
-router.post("/",async(req,res) => {
+router.post("/",function(req,res){
     res.writeHead(200,{
         "Content-Type" : "application/json",
     });

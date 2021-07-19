@@ -1,0 +1,71 @@
+.listHeader{
+    font-size :"10px";
+    border: 1px solid #cacaca;
+    margin-left : 4px;
+    margin-top : 10px;
+    margin-bottom : 5px;
+    padding : 5px 0px 5px 5px;
+    border-radius : 3;
+    width : 290px;
+    background : #f1f5fa;
+}
+
+.listBox{
+  border-radius : 5px;
+}
+.upperText{
+  font-size : 0.5rem;
+  margin-left : 4px !important;
+  width: 70px;
+}
+
+.MuiTypography-body2{
+  font-size: 0.5rem !important;
+  color: black;
+}
+
+.MuiList-root {
+  margin-top: 10px;
+  padding-top : 5px;
+  padding-bottom: 35px;
+
+}
+
+.MuiListItem-container{
+  width : 180px;
+  margin-bottom : 5px;
+}
+
+.MuiListItem-root {
+  margin-left : 45px;
+  width: 190px;
+  height : 35px;
+  border-radius : 3px;  
+}
+
+.MuiListItemText-root{
+  padding : 0px 0px 0px 0px;
+}
+
+.headerFront{
+  font-size : 11px;
+  padding: 0px 9px 0px 10px;
+  margin-top :3;
+  font-Weight : bold;
+}
+
+.headerBack{
+  font-size : 11px;
+}
+
+.peopleNumber{
+  margin: 21px 10px 0px 0px;
+  border-radius : 3px;
+  float : right;
+  padding-right : 0px;
+  font-size : 10px;
+}
+
+svg{
+  height : 0.8em;
+}
