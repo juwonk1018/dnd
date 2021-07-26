@@ -30,8 +30,10 @@ function InnerBox(parameter) {
                         <span className = "headerFront">{parameter.index===0?"S":(parameter.index===parameter.testArray.length-1?"E":parameter.index)}</span>
                         <span className="headerBack">{parameter.testName[parameter.index]}</span>
                     </ul>
+                
+                
                 <span className = "peopleNumber"><BsPersonFill/><span style = {{ "color" : (parameter.testNum[parameter.index]>6) ? "red" : "black"}}>{parameter.testNum[parameter.index]}명</span>/6명</span>
-            
+                
                 <Droppable key = "1" droppableId={parameter.testName[parameter.index]} isDropDisabled={parameter.ShowButton} type = "innerDropBox">
                 {(provided, snapshot) => (
                     <RootRef rootRef={provided.innerRef}>
@@ -66,7 +68,6 @@ function InnerBox(parameter) {
                     </RootRef>
                 )}
                 </Droppable>
-                        
                 </div>
             </div>
             {provided.placeholder}
