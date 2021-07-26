@@ -10,7 +10,6 @@ import { BsPersonFill} from 'react-icons/bs';
 import 'antd/dist/antd.css';
 
 function InnerBox(parameter) {
-    var ShowButton = parameter.show;
 
     const getItemStyle = (isDragging, draggableStyle) => ({
       ...draggableStyle,
@@ -26,12 +25,12 @@ function InnerBox(parameter) {
             <div>
             <div className = "listBox" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                 <div>
-                <ul className = "listHeader">
-                    {!ShowButton &&<FiAlignJustify/>}
-                    <span className = "headerFront">{parameter.index===0?"S":(parameter.index===parameter.testArray.length-1?"E":parameter.index)}</span>
-                    <span className="headerBack">{parameter.testName[parameter.index]}</span>
-                </ul>
-                <span className = "peopleNumber"><BsPersonFill/><span style = {{"color" : (parameter.testNum[parameter.index]>6) ? "red" : "black"}}>{parameter.testNum[parameter.index]}명</span>/6명</span>
+                    <ul className = "listHeader">
+                        {!parameter.ShowButton &&<FiAlignJustify viewBox = "0 0 24 20"/>}
+                        <span className = "headerFront">{parameter.index===0?"S":(parameter.index===parameter.testArray.length-1?"E":parameter.index)}</span>
+                        <span className="headerBack">{parameter.testName[parameter.index]}</span>
+                    </ul>
+                <span className = "peopleNumber"><BsPersonFill/><span style = {{ "color" : (parameter.testNum[parameter.index]>6) ? "red" : "black"}}>{parameter.testNum[parameter.index]}명</span>/6명</span>
             
                 <Droppable key = "1" droppableId={parameter.testName[parameter.index]} isDropDisabled={parameter.ShowButton} type = "innerDropBox">
                 {(provided, snapshot) => (
@@ -49,14 +48,14 @@ function InnerBox(parameter) {
                             snapshot.isDragging,
                             provided.draggableProps.style
                             )}>
-                            {!ShowButton && <FiAlignJustify/>}
+                            {!parameter.ShowButton && <FiAlignJustify/>}
                             <ListItemText className = "upperText" secondary={item.text}/>
                             <ListItemText
                                 className = "status" id = "secondary"
                                 secondaryTypographyProps={ item.status === "승차"? {style :{"color" : "green"}} : {style :{"color" : "purple"}}}
                                 secondary={item.status}
                             />
-                            {!ShowButton && <span><AiOutlineMinus/></span>}
+                            {!parameter.ShowButton && <span><AiOutlineMinus/></span>}
                             <ListItemSecondaryAction></ListItemSecondaryAction>
                             </ListItem>
                             )}
