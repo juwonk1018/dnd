@@ -31,9 +31,9 @@ function Map(parameter){
             infowindow.open(map, marker);
           });
         }
-      },[parameter.keyValue]);
+      },[parameter.Location]);
+      parameter.locationX && console.log(parameter.locationX);
     }
-    
     MapContainer();
     return(
         <div className = "mapContent" id="map"></div>

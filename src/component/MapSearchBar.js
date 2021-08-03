@@ -8,6 +8,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 function MapSearchBar(){
     const {kakao} = window;
     const [key, setKey] = useState("");
+    const [location, setLocation] = useState("");
     const [options, setOptions] = useState([]);
     const [savedData, setSavedData] = useState([]);
 
@@ -43,12 +44,13 @@ function MapSearchBar(){
 
     const onSelect = (event, value) => {
         value && setKey(value.key);
+        value && setLocation(options[value.key].addr);
+        
     };
 
     return(
     <div>
         <div className = "mapSearchBar">
-
             <Autocomplete
                 options={options}
                 size = "small"
@@ -72,11 +74,9 @@ function MapSearchBar(){
                 }}
             />
         </div>
-
         <div>
-            <Map data = {savedData} keyValue = {key}/>
+            <Map data = {savedData} keyValue = {key} Location = {location}/>
         </div>
-
     </div>
     );
 }
